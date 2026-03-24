@@ -7,1364 +7,885 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f5f0e8;
-      --ink: #1a1208;
-      --cream: #faf7f0;
-      --gold: #c9953a;
-      --gold-light: #e8c97a;
-      --rust: #b84c2b;
-      --sage: #3d5a4c;
-      --border: #d4c9b0;
-      --muted: #7a6e5e;
-      --card-bg: #fffef9;
+      --bg: #f5f0e8; --ink: #1a1208; --cream: #faf7f0; --gold: #c9953a;
+      --gold-light: #e8c97a; --rust: #b84c2b; --sage: #3d5a4c;
+      --border: #d4c9b0; --muted: #7a6e5e; --card-bg: #fffef9;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      min-height: 100vh;
-    }
+    /* ── HEADER: now nav > ul > li > a  (was nav > a) ── */
+    .site-header { background: var(--ink); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 72px; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); }
+    .brand-mark { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--cream); letter-spacing: -0.5px; }
+    .brand-mark em { color: var(--gold); font-style: normal; }
+    /* nav-group is now a <ul> */
+    .nav-group { display: flex; gap: 28px; list-style: none; }
+    .nav-group li a { color: #b0a898; text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; transition: color .2s; }
+    .nav-group li a:hover { color: var(--gold-light); }
+    .action-btn { background: var(--gold); color: var(--ink); border: none; padding: 9px 20px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: background .2s; }
+    .action-btn:hover { background: var(--gold-light); }
 
-    /* ── HEADER ── */
-    header {
-      background: var(--ink);
-      padding: 0 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 3px solid var(--gold);
-    }
+    /* ── HERO: stats now a <dl> ── */
+    .splash-zone { background: var(--ink); padding: 80px 40px 70px; text-align: center; position: relative; overflow: hidden; }
+    .splash-zone::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201,149,58,.04) 40px, rgba(201,149,58,.04) 41px); }
+    .splash-kicker { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 18px; }
+    .splash-zone h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 900; color: var(--cream); line-height: 1.1; max-width: 780px; margin: 0 auto 20px; }
+    .splash-zone h1 em { color: var(--gold); font-style: italic; }
+    .splash-zone > p { color: #9a8e7e; font-size: 1.05rem; max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+    /* metrics-row is now a <dl> with dt/dd pairs */
+    .metrics-row { display: flex; justify-content: center; gap: 60px; margin-top: 40px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.08); }
+    .metric-cell { text-align: center; }
+    .metric-figure { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); }
+    .metric-caption { font-size: 0.75rem; color: #7a6e5e; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
 
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--cream);
-      letter-spacing: -0.5px;
-    }
-    .logo span { color: var(--gold); }
+    /* ── FILTER STRIP ── */
+    .filter-strip { background: var(--cream); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; gap: 16px; }
+    .filter-strip input { flex: 1; border: 1.5px solid var(--border); background: white; padding: 11px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--ink); outline: none; }
+    .filter-strip input:focus { border-color: var(--gold); }
+    .filter-strip select { border: 1.5px solid var(--border); background: white; padding: 11px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--ink); outline: none; cursor: pointer; }
+    .filter-strip button { background: var(--sage); color: white; border: none; padding: 11px 28px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
 
-    nav { display: flex; gap: 28px; }
-    nav a {
-      color: #b0a898;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-    nav a:hover { color: var(--gold-light); }
+    /* ── CONTENT GRID ── */
+    .content-grid { max-width: 1300px; margin: 0 auto; padding: 48px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 48px; }
+    .feed-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
+    .feed-header h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; }
+    .tally-text { font-size: 0.82rem; color: var(--muted); font-weight: 500; }
 
-    .header-cta {
-      background: var(--gold);
-      color: var(--ink);
-      border: none;
-      padding: 9px 20px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.82rem;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .header-cta:hover { background: var(--gold-light); }
+    /* ── LISTING BLOCK: now a <section> wrapping a <header>/<div>/<footer> ── */
+    .listing-block { background: var(--card-bg); border: 1px solid var(--border); margin-bottom: 24px; transition: box-shadow .25s, transform .2s; }
+    .listing-block:hover { box-shadow: 6px 6px 0 var(--gold-light); transform: translate(-2px,-2px); }
 
-    /* ── HERO ── */
-    .hero {
-      background: var(--ink);
-      padding: 80px 40px 70px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 40px,
-        rgba(201,149,58,.04) 40px,
-        rgba(201,149,58,.04) 41px
-      );
-    }
-    .hero-eyebrow {
-      font-size: 0.75rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 600;
-      margin-bottom: 18px;
-    }
-    .hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      font-weight: 900;
-      color: var(--cream);
-      line-height: 1.1;
-      max-width: 780px;
-      margin: 0 auto 20px;
-    }
-    .hero h1 em { color: var(--gold); font-style: italic; }
-    .hero p {
-      color: #9a8e7e;
-      font-size: 1.05rem;
-      max-width: 520px;
-      margin: 0 auto 36px;
-      line-height: 1.7;
-    }
+    /* entry-top is now a <header> tag (was <div>) */
+    .entry-top { padding: 24px 28px 18px; display: flex; gap: 20px; align-items: flex-start; border-bottom: 1px solid var(--border); }
+    .org-emblem { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: white; flex-shrink: 0; }
+    .org-details { flex: 1; }
+    /* org-title is now an <h3> (was <div>) */
+    .org-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .org-title a { text-decoration: none; color: inherit; }
+    .org-title a:hover { color: var(--gold); }
+    /* org-meta is now a <ul> with <li> children (was <div> with <span>) */
+    .org-meta { font-size: 0.82rem; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; list-style: none; }
+    .label-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .label-pill { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; padding: 3px 10px; border: 1px solid; text-transform: uppercase; }
+    .pill-sector { border-color: var(--sage); color: var(--sage); }
+    .pill-auth { border-color: var(--gold); color: var(--gold); background: rgba(201,149,58,.06); }
+    .pill-top { background: var(--rust); color: white; border-color: var(--rust); }
 
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 60px;
-      margin-top: 40px;
-      padding-top: 40px;
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .stat-item { text-align: center; }
-    .stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: #7a6e5e;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
+    /* score-panel: DOM order swapped (score comes first in HTML, sits right via flex order) */
+    .score-panel { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; }
+    .score-main { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--ink); line-height: 1; order: 1; }
+    .score-main .denom { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .star-row { color: var(--gold); font-size: 1rem; letter-spacing: 1px; margin: 4px 0; order: 2; }
+    .vol-note { font-size: 0.78rem; color: var(--muted); white-space: nowrap; order: 3; }
 
-    /* ── SEARCH ── */
-    .search-bar {
-      background: var(--cream);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .search-bar input {
-      flex: 1;
-      border: 1.5px solid var(--border);
-      background: white;
-      padding: 11px 18px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      color: var(--ink);
-      outline: none;
-    }
-    .search-bar input:focus { border-color: var(--gold); }
-    .search-bar select {
-      border: 1.5px solid var(--border);
-      background: white;
-      padding: 11px 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      color: var(--ink);
-      outline: none;
-      cursor: pointer;
-    }
-    .search-bar button {
-      background: var(--sage);
-      color: white;
-      border: none;
-      padding: 11px 28px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
+    /* entry-body is now a <section> (was <div>); feedback-row is now <li> inside <ol> */
+    .entry-body { padding: 22px 28px; }
+    .entry-body > ol { list-style: none; }
+    .feedback-row { padding: 16px 0; border-bottom: 1px dashed var(--border); }
+    .feedback-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-    /* ── MAIN LAYOUT ── */
-    .main-wrapper {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 48px 40px;
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 48px;
-    }
+    /* feedback-top: score/date NOW come first in DOM, then writer — flex row-reverse handles display */
+    .feedback-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-direction: row; }
+    .feedback-aside { display: flex; align-items: center; gap: 12px; }
+    .feedback-stars { color: var(--gold); font-size: 0.8rem; }
+    /* feedback-ts is now a <time> element */
+    .feedback-ts { font-size: 0.75rem; color: var(--muted); }
+    .writer-group { display: flex; align-items: center; gap: 10px; }
+    .writer-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0; }
+    /* writer-label is now a <strong>; writer-post is now a <small> */
+    .writer-label { font-weight: 600; font-size: 0.88rem; display: block; }
+    .writer-post { font-size: 0.75rem; color: var(--muted); display: block; }
 
-    /* ── SECTION HEADING ── */
-    .section-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--ink);
-    }
-    .section-head h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-    }
-    .result-count {
-      font-size: 0.82rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
+    /* feedback-heading is now an <h4>; feedback-content is now a <blockquote> */
+    .feedback-heading { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+    .feedback-content { font-size: 0.875rem; color: #4a3f30; line-height: 1.65; }
 
-    /* ── COMPANY CARD ── */
-    .company-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      margin-bottom: 24px;
-      transition: box-shadow .25s, transform .2s;
-      position: relative;
-    }
-    .company-card:hover {
-      box-shadow: 6px 6px 0 var(--gold-light);
-      transform: translate(-2px, -2px);
-    }
+    /* verdict-split is now a <dl> with <dt>/<dd> pairs */
+    .verdict-split { display: flex; gap: 16px; margin-top: 10px; }
+    .v-good, .v-bad { flex: 1; font-size: 0.78rem; }
+    .v-good dt, .v-good dd { display: inline; }
+    .v-bad dt, .v-bad dd { display: inline; }
+    .v-good dt { color: var(--sage); font-weight: 700; }
+    .v-bad dt { color: var(--rust); font-weight: 700; }
 
-    .card-header {
-      padding: 24px 28px 18px;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-      border-bottom: 1px solid var(--border);
-    }
+    /* entry-base is now a <footer> tag (was <div>) */
+    .entry-base { padding: 14px 28px; background: rgba(0,0,0,.02); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .attr-strip { display: flex; gap: 20px; }
+    .attr-cell { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .attr-track { width: 50px; height: 4px; background: var(--border); position: relative; }
+    .attr-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--gold); }
+    .cta-cluster { display: flex; gap: 12px; }
+    .ghost-btn { border: 1.5px solid var(--border); background: none; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--ink); cursor: pointer; transition: border-color .2s, color .2s; }
+    .ghost-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .solid-btn { background: var(--ink); color: white; border: none; padding: 7px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .solid-btn:hover { background: var(--sage); }
 
-    .company-logo {
-      width: 64px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: white;
-      flex-shrink: 0;
-    }
+    /* ── SIDEBAR: rail-module is now <section>; rank-row is <li> in <ol> ── */
+    .right-rail {}
+    .rail-module { background: var(--card-bg); border: 1px solid var(--border); margin-bottom: 28px; }
+    .module-heading { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; padding: 16px 20px; border-bottom: 2px solid var(--ink); background: var(--ink); color: var(--cream); }
+    .module-inner { padding: 16px 20px; }
+    .opt-list { list-style: none; }
+    .opt-list li { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 0.875rem; cursor: pointer; transition: color .15s; }
+    .opt-list li:last-child { border-bottom: none; }
+    .opt-list li:hover { color: var(--gold); }
+    .opt-tally { background: var(--bg); padding: 2px 8px; font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+    /* rank-row is now an <li> inside an <ol> */
+    .top-listings-ol { list-style: none; }
+    .rank-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--border); cursor: pointer; }
+    .rank-row:last-child { border-bottom: none; }
+    .rank-num { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; color: var(--gold); width: 24px; flex-shrink: 0; }
+    .rank-body { flex: 1; }
+    .rank-name { font-weight: 600; font-size: 0.875rem; }
+    .rank-sector { font-size: 0.75rem; color: var(--muted); }
+    .rank-val { font-weight: 700; font-size: 0.9rem; color: var(--sage); }
+    .dist-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.82rem; }
+    .dist-tag { width: 36px; text-align: right; color: var(--muted); }
+    .dist-track { flex: 1; height: 6px; background: var(--border); }
+    .dist-fill { height: 100%; background: var(--gold); }
+    .dist-pct { width: 30px; color: var(--muted); font-size: 0.75rem; }
 
-    .company-meta { flex: 1; }
-    .company-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 4px;
-    }
-    .company-name a { text-decoration: none; color: inherit; }
-    .company-name a:hover { color: var(--gold); }
+    /* PAGINATION */
+    .pager { display: flex; gap: 8px; justify-content: center; margin-top: 40px; }
+    .pager-step { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); background: var(--card-bg); font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all .2s; color: var(--ink); }
+    .pager-step:hover, .pager-step.on { background: var(--ink); color: white; border-color: var(--ink); }
 
-    .company-info {
-      font-size: 0.82rem;
-      color: var(--muted);
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    .company-info span::before { content: ''; }
-
-    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 3px 10px;
-      border: 1px solid;
-      text-transform: uppercase;
-    }
-    .tag-industry { border-color: var(--sage); color: var(--sage); }
-    .tag-verified { border-color: var(--gold); color: var(--gold); background: rgba(201,149,58,.06); }
-    .tag-featured { background: var(--rust); color: white; border-color: var(--rust); }
-
-    /* Rating Block */
-    .rating-block {
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .rating-score {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--ink);
-      line-height: 1;
-    }
-    .rating-score .out-of { font-size: 1rem; color: var(--muted); font-weight: 400; }
-    .stars {
-      color: var(--gold);
-      font-size: 1rem;
-      letter-spacing: 1px;
-      margin: 4px 0;
-    }
-    .review-count {
-      font-size: 0.78rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    /* Card Body — reviews */
-    .card-body { padding: 22px 28px; }
-
-    .review-item {
-      padding: 16px 0;
-      border-bottom: 1px dashed var(--border);
-    }
-    .review-item:last-child { border-bottom: none; padding-bottom: 0; }
-
-    .review-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    .reviewer-info { display: flex; align-items: center; gap: 10px; }
-    .reviewer-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: white;
-      flex-shrink: 0;
-    }
-    .reviewer-name {
-      font-weight: 600;
-      font-size: 0.88rem;
-    }
-    .reviewer-role {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-    .review-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .review-stars { color: var(--gold); font-size: 0.8rem; }
-    .review-date { font-size: 0.75rem; color: var(--muted); }
-
-    .review-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--ink);
-    }
-    .review-body {
-      font-size: 0.875rem;
-      color: #4a3f30;
-      line-height: 1.65;
-    }
-
-    .review-pros-cons {
-      display: flex;
-      gap: 16px;
-      margin-top: 10px;
-    }
-    .pros, .cons {
-      flex: 1;
-      font-size: 0.78rem;
-    }
-    .pros strong { color: var(--sage); }
-    .cons strong { color: var(--rust); }
-
-    .card-footer {
-      padding: 14px 28px;
-      background: rgba(0,0,0,.02);
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .breakdown {
-      display: flex;
-      gap: 20px;
-    }
-    .breakdown-item {
-      font-size: 0.78rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .breakdown-bar {
-      width: 50px;
-      height: 4px;
-      background: var(--border);
-      position: relative;
-    }
-    .breakdown-fill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      background: var(--gold);
-    }
-    .card-actions { display: flex; gap: 12px; }
-    .btn-outline {
-      border: 1.5px solid var(--border);
-      background: none;
-      padding: 7px 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--ink);
-      cursor: pointer;
-      transition: border-color .2s, color .2s;
-    }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-    .btn-primary {
-      background: var(--ink);
-      color: white;
-      border: none;
-      padding: 7px 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .btn-primary:hover { background: var(--sage); }
-
-    /* ── SIDEBAR ── */
-    .sidebar {}
-    .sidebar-widget {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      margin-bottom: 28px;
-    }
-    .widget-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 16px 20px;
-      border-bottom: 2px solid var(--ink);
-      background: var(--ink);
-      color: var(--cream);
-      letter-spacing: 0.3px;
-    }
-    .widget-body { padding: 16px 20px; }
-
-    /* Industry Filter */
-    .filter-list { list-style: none; }
-    .filter-list li {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px dashed var(--border);
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: color .15s;
-    }
-    .filter-list li:last-child { border-bottom: none; }
-    .filter-list li:hover { color: var(--gold); }
-    .filter-count {
-      background: var(--bg);
-      padding: 2px 8px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    /* Top Rated */
-    .top-company {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px dashed var(--border);
-      cursor: pointer;
-    }
-    .top-company:last-child { border-bottom: none; }
-    .top-rank {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      font-weight: 900;
-      color: var(--gold);
-      width: 24px;
-      flex-shrink: 0;
-    }
-    .top-info { flex: 1; }
-    .top-name { font-weight: 600; font-size: 0.875rem; }
-    .top-cat { font-size: 0.75rem; color: var(--muted); }
-    .top-score {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--sage);
-    }
-
-    /* Rating Summary */
-    .rating-summary-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-      font-size: 0.82rem;
-    }
-    .rs-label { width: 36px; text-align: right; color: var(--muted); }
-    .rs-bar { flex: 1; height: 6px; background: var(--border); }
-    .rs-fill { height: 100%; background: var(--gold); }
-    .rs-count { width: 30px; color: var(--muted); font-size: 0.75rem; }
-
-    /* ── PAGINATION ── */
-    .pagination {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 40px;
-    }
-    .page-btn {
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid var(--border);
-      background: var(--card-bg);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all .2s;
-      color: var(--ink);
-    }
-    .page-btn:hover, .page-btn.active {
-      background: var(--ink);
-      color: white;
-      border-color: var(--ink);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--ink);
-      color: #7a6e5e;
-      padding: 40px;
-      text-align: center;
-      font-size: 0.82rem;
-      margin-top: 20px;
-      border-top: 3px solid var(--gold);
-    }
-    footer a { color: var(--gold); text-decoration: none; }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--cream);
-      margin-bottom: 12px;
-    }
-    .footer-logo span { color: var(--gold); }
-    .footer-links { display: flex; justify-content: center; gap: 24px; margin: 16px 0; }
-    .footer-links a { color: #7a6e5e; transition: color .2s; }
-    .footer-links a:hover { color: var(--gold-light); }
-
-    /* ── BADGE ── */
-    .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      color: var(--gold);
-      font-weight: 600;
-    }
+    /* FOOTER */
+    .site-footer { background: var(--ink); color: #7a6e5e; padding: 40px; text-align: center; font-size: 0.82rem; margin-top: 20px; border-top: 3px solid var(--gold); }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--cream); margin-bottom: 12px; }
+    .footer-brand em { color: var(--gold); font-style: normal; }
+    .footer-nav { display: flex; justify-content: center; gap: 24px; margin: 16px 0; list-style: none; }
+    .footer-nav li a { color: #7a6e5e; text-decoration: none; transition: color .2s; }
+    .footer-nav li a:hover { color: var(--gold-light); }
 
     @media (max-width: 900px) {
-      .main-wrapper { grid-template-columns: 1fr; }
-      .sidebar { order: -1; }
-      .hero-stats { gap: 30px; }
+      .content-grid { grid-template-columns: 1fr; }
+      .right-rail { order: -1; }
+      .metrics-row { gap: 30px; }
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="logo">Trust<span>Vault</span></div>
-  <nav>
-    <a href="#">Reviews</a>
-    <a href="#">Companies</a>
-    <a href="#">Industries</a>
-    <a href="#">Trends</a>
-    <a href="#">About</a>
-  </nav>
-  <button class="header-cta">Write a Review</button>
+<!--
+  STRUCTURAL CHANGES vs previous version:
+  - <header> tag for site-header (was <header> ✓ same, but nav-group is now <ul><li><a> instead of bare <a>)
+  - hero stats: <dl> with <div class="metric-cell"><dt>/<dd> (was nested divs)
+  - .listing-block: <section> (was <article>)
+  - .entry-top: <header> tag (was <div>)
+  - .org-title: <h3> (was <div>)
+  - .org-meta: <ul><li> (was <div><span>)
+  - .entry-body: <section> wrapping <ol><li> for reviews (was <div> wrapping bare <div>s)
+  - .feedback-row: <li> (was <div>)
+  - .feedback-heading: <h4> (was <div>)
+  - .feedback-content: <blockquote> (was <div>)
+  - .writer-label: <strong> (was <div>); .writer-post: <small> (was <div>)
+  - .feedback-ts: <time> element (was <div>)
+  - .verdict-split: <dl><div class="v-good/v-bad"><dt><dd> (was <div><div>)
+  - .entry-base: <footer> tag (was <div>)
+  - .rail-module: <section> (was <div>)
+  - top-rated list: <ol class="top-listings-ol"><li class="rank-row"> (was bare <div>s)
+  - footer nav: <ul><li><a> (was bare <a>s)
+-->
+
+<!-- HEADER: nav-group is now <ul><li><a> -->
+<header class="site-header">
+  <p class="brand-mark">Trust<em>Vault</em></p>
+  <ul class="nav-group">
+    <li><a href="#">Reviews</a></li>
+    <li><a href="#">Companies</a></li>
+    <li><a href="#">Industries</a></li>
+    <li><a href="#">Trends</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <button class="action-btn">Write a Review</button>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <p class="hero-eyebrow">✦ The Independent Review Platform</p>
+<!-- HERO: stats are now a <dl> -->
+<section class="splash-zone">
+  <p class="splash-kicker">✦ The Independent Review Platform</p>
   <h1>Real Opinions. <em>Verified</em> Voices. Trusted Insights.</h1>
   <p>Explore thousands of authentic company reviews from real employees, customers, and industry insiders.</p>
-
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-number" data-stat="total-companies">12,480</div>
-      <div class="stat-label">Companies Listed</div>
+  <dl class="metrics-row">
+    <div class="metric-cell">
+      <dd class="metric-figure">12,480</dd>
+      <dt class="metric-caption">Companies Listed</dt>
     </div>
-    <div class="stat-item">
-      <div class="stat-number" data-stat="total-reviews">284,930</div>
-      <div class="stat-label">Verified Reviews</div>
+    <div class="metric-cell">
+      <dd class="metric-figure">284,930</dd>
+      <dt class="metric-caption">Verified Reviews</dt>
     </div>
-    <div class="stat-item">
-      <div class="stat-number" data-stat="active-users">98,200</div>
-      <div class="stat-label">Monthly Users</div>
+    <div class="metric-cell">
+      <dd class="metric-figure">98,200</dd>
+      <dt class="metric-caption">Monthly Users</dt>
     </div>
-    <div class="stat-item">
-      <div class="stat-number" data-stat="industries">47</div>
-      <div class="stat-label">Industries Covered</div>
+    <div class="metric-cell">
+      <dd class="metric-figure">47</dd>
+      <dt class="metric-caption">Industries Covered</dt>
     </div>
-  </div>
+  </dl>
 </section>
 
-<!-- SEARCH BAR -->
-<div class="search-bar">
-  <input type="text" id="search-input" placeholder="Search company name, industry, or keyword..." />
-  <select id="industry-filter">
+<!-- SEARCH -->
+<div class="filter-strip">
+  <input type="text" id="q-input" placeholder="Search company name, industry, or keyword..." />
+  <select id="q-sector">
     <option value="">All Industries</option>
-    <option>Technology</option>
-    <option>Finance</option>
-    <option>Healthcare</option>
-    <option>E-Commerce</option>
-    <option>Manufacturing</option>
-    <option>Consulting</option>
-    <option>SaaS</option>
-    <option>Logistics</option>
+    <option>Technology</option><option>Finance</option><option>Healthcare</option>
+    <option>E-Commerce</option><option>Manufacturing</option><option>Consulting</option>
+    <option>SaaS</option><option>Logistics</option>
   </select>
-  <select id="rating-filter">
+  <select id="q-score">
     <option value="">All Ratings</option>
-    <option>5 Stars</option>
-    <option>4+ Stars</option>
-    <option>3+ Stars</option>
-    <option>Under 3</option>
+    <option>5 Stars</option><option>4+ Stars</option><option>3+ Stars</option><option>Under 3</option>
   </select>
-  <button onclick="applyFilters()">Search</button>
+  <button onclick="runFilter()">Search</button>
 </div>
 
-<!-- MAIN CONTENT -->
-<div class="main-wrapper">
-  <main id="company-list">
-    <div class="section-head">
+<div class="content-grid">
+  <main id="listings-feed">
+    <div class="feed-header">
       <h2>Company Reviews</h2>
-      <span class="result-count" id="result-count">Showing 8 of 12,480 companies</span>
+      <span class="tally-text" id="tally-label">Showing 6 of 12,480 companies</span>
     </div>
 
-    <!-- ━━━━ COMPANY 1 ━━━━ -->
-    <article class="company-card" data-company-id="1" data-industry="Technology" data-rating="4.7">
-      <div class="card-header">
-        <div class="company-logo" style="background:#1a3a5c;">NX</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="NexaCore Technologies">NexaCore Technologies</a></div>
-          <div class="company-info">
-            <span data-field="industry">Technology · SaaS</span>
-            <span data-field="founded">Founded 2011</span>
-            <span data-field="size">5,200 Employees</span>
-            <span data-field="location">San Francisco, CA</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">SaaS</span>
-            <span class="tag tag-verified">✔ Verified</span>
-            <span class="tag tag-featured">Featured</span>
-          </div>
-        </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">4.7<span class="out-of">/5</span></div>
-          <div class="stars">★★★★★</div>
-          <div class="review-count" data-field="review-count">1,842 reviews</div>
-        </div>
-      </div>
+    <!-- ══════════════════════════════════
+         LISTING 1 — NexaCore Technologies
+         .listing-block = <section> (was <article>)
+         .entry-top     = <header>  (was <div>)
+         .org-title     = <h3>      (was <div>)
+         .org-meta      = <ul><li>  (was <div><span>)
+         .entry-body    = <section> with <ol><li> reviews
+         .entry-base    = <footer>  (was <div>)
+    ══════════════════════════════════ -->
+    <section class="listing-block" tv-ref="1" tv-sector="Technology" tv-score="4.7">
 
-      <div class="card-body">
-        <div class="review-item" data-review-id="r101">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#1a3a5c;">JM</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">James Mulligan</div>
-                <div class="reviewer-role" data-field="reviewer-role">Senior Software Engineer · Current Employee</div>
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#1a3a5c; margin:0;">NX</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="NexaCore Technologies">NexaCore Technologies</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="Technology · SaaS">Technology · SaaS</li>
+            <li tv-yr="2011">Founded 2011</li>
+            <li tv-size="5200">5,200 Employees</li>
+            <li tv-hq="San Francisco, CA">San Francisco, CA</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">SaaS</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
+            <span class="label-pill pill-top">Featured</span>
+          </div>
+        </div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="4.7">4.7<span class="denom">/5</span></b>
+          <p class="star-row">★★★★★</p>
+          <p class="vol-note" tv-vol="1842">1,842 reviews</p>
+        </aside>
+      </header>
+
+      <section class="entry-body">
+        <ol>
+          <!-- Review 1 -->
+          <li class="feedback-row" tv-rid="r101">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#1a3a5c;">JM</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="James Mulligan">James Mulligan</strong>
+                  <small class="writer-post" tv-role="Senior Software Engineer · Current Employee">Senior Software Engineer · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="5">★★★★★</span>
+                <time class="feedback-ts" tv-posted="2025-03-02" datetime="2025-03-02">March 2, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★★</div>
-              <div class="review-date" data-field="review-date">March 2, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">World-class engineering culture with real impact</div>
-          <div class="review-body" data-field="review-text">NexaCore has completely transformed how I think about work-life balance in tech. The leadership is transparent, the pay is competitive, and the tech stack is genuinely cutting-edge. I've grown more in 18 months here than in 5 years elsewhere. The internal mobility program is exceptional — I switched teams twice without any friction.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Excellent compensation, remote flexibility, strong mentorship</div>
-            <div class="cons"><strong>✗ Cons:</strong> On-call rotations can be demanding during product launches</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r102">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#3d5a4c;">SR</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Sophia Reinholt</div>
-                <div class="reviewer-role" data-field="reviewer-role">Product Manager · Former Employee</div>
+            <h4 class="feedback-heading" tv-subject="World-class engineering culture with real impact">World-class engineering culture with real impact</h4>
+            <blockquote class="feedback-content" tv-body>NexaCore has completely transformed how I think about work-life balance in tech. The leadership is transparent, the pay is competitive, and the tech stack is genuinely cutting-edge. I've grown more in 18 months here than in 5 years elsewhere. The internal mobility program is exceptional — I switched teams twice without any friction.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Excellent compensation, remote flexibility, strong mentorship</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>On-call rotations can be demanding during product launches</dd></div>
+            </dl>
+          </li>
+          <!-- Review 2 -->
+          <li class="feedback-row" tv-rid="r102">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#3d5a4c;">SR</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Sophia Reinholt">Sophia Reinholt</strong>
+                  <small class="writer-post" tv-role="Product Manager · Former Employee">Product Manager · Former Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="4">★★★★☆</span>
+                <time class="feedback-ts" tv-posted="2025-01-15" datetime="2025-01-15">January 15, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★☆</div>
-              <div class="review-date" data-field="review-date">January 15, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Fantastic product team, politics at the top</div>
-          <div class="review-body" data-field="review-text">The day-to-day work is excellent. NexaCore's product culture is collaborative and data-driven, which I loved. However, as you move up the org chart, there's a noticeable political layer that slows decision-making. Mid-level management is where the bottleneck lives. Despite that, I'd recommend it to any early-career PM looking to grow fast.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Strong product processes, good data culture, excellent team dynamics</div>
-            <div class="cons"><strong>✗ Cons:</strong> Slow promotions, exec layer disconnected from ground reality</div>
-          </div>
-        </div>
-      </div>
+            <h4 class="feedback-heading" tv-subject="Fantastic product team, politics at the top">Fantastic product team, politics at the top</h4>
+            <blockquote class="feedback-content" tv-body>The day-to-day work is excellent. NexaCore's product culture is collaborative and data-driven, which I loved. However, as you move up the org chart, there's a noticeable political layer that slows decision-making. Mid-level management is where the bottleneck lives. Despite that, I'd recommend it to any early-career PM looking to grow fast.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Strong product processes, good data culture, excellent team dynamics</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Slow promotions, exec layer disconnected from ground reality</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
 
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:92%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:88%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:78%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:84%"></div></div></div>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:92%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:88%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:78%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:84%"></div></div></span>
         </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 1,842 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 1,842 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
         </div>
-      </div>
-    </article>
+      </footer>
+    </section>
 
-    <!-- ━━━━ COMPANY 2 ━━━━ -->
-    <article class="company-card" data-company-id="2" data-industry="Finance" data-rating="4.2">
-      <div class="card-header">
-        <div class="company-logo" style="background:#7a2d1e;">AP</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="Apex Capital Group">Apex Capital Group</a></div>
-          <div class="company-info">
-            <span data-field="industry">Finance · Investment Banking</span>
-            <span data-field="founded">Founded 1998</span>
-            <span data-field="size">3,100 Employees</span>
-            <span data-field="location">New York, NY</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">Finance</span>
-            <span class="tag tag-verified">✔ Verified</span>
+    <!-- ══════════════════════════════════ LISTING 2 — Apex Capital Group ══ -->
+    <section class="listing-block" tv-ref="2" tv-sector="Finance" tv-score="4.2">
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#7a2d1e; margin:0;">AP</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="Apex Capital Group">Apex Capital Group</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="Finance · Investment Banking">Finance · Investment Banking</li>
+            <li tv-yr="1998">Founded 1998</li>
+            <li tv-size="3100">3,100 Employees</li>
+            <li tv-hq="New York, NY">New York, NY</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">Finance</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
           </div>
         </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">4.2<span class="out-of">/5</span></div>
-          <div class="stars">★★★★☆</div>
-          <div class="review-count" data-field="review-count">963 reviews</div>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="review-item" data-review-id="r201">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#7a2d1e;">LK</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Lena Kovacs</div>
-                <div class="reviewer-role" data-field="reviewer-role">Analyst II · Current Employee</div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="4.2">4.2<span class="denom">/5</span></b>
+          <p class="star-row">★★★★☆</p>
+          <p class="vol-note" tv-vol="963">963 reviews</p>
+        </aside>
+      </header>
+      <section class="entry-body">
+        <ol>
+          <li class="feedback-row" tv-rid="r201">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#7a2d1e;">LK</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Lena Kovacs">Lena Kovacs</strong>
+                  <small class="writer-post" tv-role="Analyst II · Current Employee">Analyst II · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="4">★★★★☆</span>
+                <time class="feedback-ts" tv-posted="2025-02-20" datetime="2025-02-20">February 20, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★☆</div>
-              <div class="review-date" data-field="review-date">February 20, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">High pressure, high reward — not for everyone</div>
-          <div class="review-body" data-field="review-text">Apex is an intense environment that demands the best from you every single day. The compensation is among the best in the city, and the brand name opens doors. The hours are genuinely brutal during deal season — I've seen 90-hour weeks. That said, the caliber of colleagues is extraordinary, and the learning curve is vertical. You earn every dollar here.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Top-tier compensation, elite network, prestigious brand</div>
-            <div class="cons"><strong>✗ Cons:</strong> Extreme work hours, high burnout rate, limited personal time</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r202">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#c9953a;">TR</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Thomas Rourke</div>
-                <div class="reviewer-role" data-field="reviewer-role">VP of Risk Management · Former Employee</div>
+            <h4 class="feedback-heading" tv-subject="High pressure, high reward — not for everyone">High pressure, high reward — not for everyone</h4>
+            <blockquote class="feedback-content" tv-body>Apex is an intense environment that demands the best from you every single day. The compensation is among the best in the city, and the brand name opens doors. The hours are genuinely brutal during deal season — I've seen 90-hour weeks. That said, the caliber of colleagues is extraordinary, and the learning curve is vertical. You earn every dollar here.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Top-tier compensation, elite network, prestigious brand</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Extreme work hours, high burnout rate, limited personal time</dd></div>
+            </dl>
+          </li>
+          <li class="feedback-row" tv-rid="r202">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#c9953a;">TR</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Thomas Rourke">Thomas Rourke</strong>
+                  <small class="writer-post" tv-role="VP of Risk Management · Former Employee">VP of Risk Management · Former Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="5">★★★★★</span>
+                <time class="feedback-ts" tv-posted="2024-12-08" datetime="2024-12-08">December 8, 2024</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★★</div>
-              <div class="review-date" data-field="review-date">December 8, 2024</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">The best decade of my career</div>
-          <div class="review-body" data-field="review-text">I spent 10 years at Apex and left only to start my own firm. The institutional knowledge you build here is unparalleled. Risk frameworks are world-class, the leadership genuinely values expert opinions, and career progression — while slow by tech standards — is predictable and merit-based. Highly recommend for finance professionals who want to build real depth.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Exceptional learning, merit-based advancement, strong pension</div>
-            <div class="cons"><strong>✗ Cons:</strong> Conservative culture, slow innovation adoption</div>
-          </div>
+            <h4 class="feedback-heading" tv-subject="The best decade of my career">The best decade of my career</h4>
+            <blockquote class="feedback-content" tv-body>I spent 10 years at Apex and left only to start my own firm. The institutional knowledge you build here is unparalleled. Risk frameworks are world-class, the leadership genuinely values expert opinions, and career progression — while slow by tech standards — is predictable and merit-based. Highly recommend for finance professionals who want to build real depth.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Exceptional learning, merit-based advancement, strong pension</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Conservative culture, slow innovation adoption</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:72%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:95%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:80%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:42%"></div></div></span>
         </div>
-      </div>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 963 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
+        </div>
+      </footer>
+    </section>
 
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:72%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:95%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:80%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:42%"></div></div></div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 963 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
-        </div>
-      </div>
-    </article>
-
-    <!-- ━━━━ COMPANY 3 ━━━━ -->
-    <article class="company-card" data-company-id="3" data-industry="Healthcare" data-rating="3.8">
-      <div class="card-header">
-        <div class="company-logo" style="background:#2a5f4f;">MH</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="MediHorizon Group">MediHorizon Group</a></div>
-          <div class="company-info">
-            <span data-field="industry">Healthcare · Hospital Network</span>
-            <span data-field="founded">Founded 1987</span>
-            <span data-field="size">18,400 Employees</span>
-            <span data-field="location">Chicago, IL</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">Healthcare</span>
-            <span class="tag tag-verified">✔ Verified</span>
+    <!-- ══════════════════════════════════ LISTING 3 — MediHorizon Group ══ -->
+    <section class="listing-block" tv-ref="3" tv-sector="Healthcare" tv-score="3.8">
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#2a5f4f; margin:0;">MH</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="MediHorizon Group">MediHorizon Group</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="Healthcare · Hospital Network">Healthcare · Hospital Network</li>
+            <li tv-yr="1987">Founded 1987</li>
+            <li tv-size="18400">18,400 Employees</li>
+            <li tv-hq="Chicago, IL">Chicago, IL</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">Healthcare</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
           </div>
         </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">3.8<span class="out-of">/5</span></div>
-          <div class="stars">★★★★☆</div>
-          <div class="review-count" data-field="review-count">2,241 reviews</div>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="review-item" data-review-id="r301">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#2a5f4f;">AN</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Amara Nwosu</div>
-                <div class="reviewer-role" data-field="reviewer-role">Registered Nurse · Current Employee</div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="3.8">3.8<span class="denom">/5</span></b>
+          <p class="star-row">★★★★☆</p>
+          <p class="vol-note" tv-vol="2241">2,241 reviews</p>
+        </aside>
+      </header>
+      <section class="entry-body">
+        <ol>
+          <li class="feedback-row" tv-rid="r301">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#2a5f4f;">AN</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Amara Nwosu">Amara Nwosu</strong>
+                  <small class="writer-post" tv-role="Registered Nurse · Current Employee">Registered Nurse · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="3">★★★☆☆</span>
+                <time class="feedback-ts" tv-posted="2025-03-10" datetime="2025-03-10">March 10, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★☆☆</div>
-              <div class="review-date" data-field="review-date">March 10, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Mission-driven but chronically understaffed</div>
-          <div class="review-body" data-field="review-text">The patients and colleagues make the work worth it, but MediHorizon consistently asks nurses to carry loads that border on unsafe. Scheduling is a nightmare, and HR is difficult to reach. The benefits package is solid, and the training programs are excellent for new nurses. Management has been making promises about staffing for two years with minimal results.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Great benefits, strong training, meaningful mission</div>
-            <div class="cons"><strong>✗ Cons:</strong> Chronic understaffing, poor HR responsiveness, high turnover</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r302">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#5a3e7a;">PG</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Dr. Paul Greenstein</div>
-                <div class="reviewer-role" data-field="reviewer-role">Attending Physician · Current Employee</div>
+            <h4 class="feedback-heading" tv-subject="Mission-driven but chronically understaffed">Mission-driven but chronically understaffed</h4>
+            <blockquote class="feedback-content" tv-body>The patients and colleagues make the work worth it, but MediHorizon consistently asks nurses to carry loads that border on unsafe. Scheduling is a nightmare, and HR is difficult to reach. The benefits package is solid, and the training programs are excellent for new nurses. Management has been making promises about staffing for two years with minimal results.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Great benefits, strong training, meaningful mission</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Chronic understaffing, poor HR responsiveness, high turnover</dd></div>
+            </dl>
+          </li>
+          <li class="feedback-row" tv-rid="r302">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#5a3e7a;">PG</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Dr. Paul Greenstein">Dr. Paul Greenstein</strong>
+                  <small class="writer-post" tv-role="Attending Physician · Current Employee">Attending Physician · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="5">★★★★★</span>
+                <time class="feedback-ts" tv-posted="2025-02-03" datetime="2025-02-03">February 3, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★★</div>
-              <div class="review-date" data-field="review-date">February 3, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Best facility resources I've seen in 20 years of medicine</div>
-          <div class="review-body" data-field="review-text">For physicians specifically, MediHorizon is a standout. The equipment is state-of-the-art, research collaboration opportunities are abundant, and administrative support for doctors is genuinely good. The research stipend allowed me to publish two papers last year. The issues that affect nursing don't seem to translate to the physician experience, which is a cultural gap worth noting.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Advanced equipment, research support, physician autonomy</div>
-            <div class="cons"><strong>✗ Cons:</strong> Systemic inequity between clinical roles, bureaucratic billing</div>
-          </div>
+            <h4 class="feedback-heading" tv-subject="Best facility resources I've seen in 20 years of medicine">Best facility resources I've seen in 20 years of medicine</h4>
+            <blockquote class="feedback-content" tv-body>For physicians specifically, MediHorizon is a standout. The equipment is state-of-the-art, research collaboration opportunities are abundant, and administrative support for doctors is genuinely good. The research stipend allowed me to publish two papers last year. The issues that affect nursing don't seem to translate to the physician experience, which is a cultural gap worth noting.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Advanced equipment, research support, physician autonomy</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Systemic inequity between clinical roles, bureaucratic billing</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:65%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:70%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:74%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:50%"></div></div></span>
         </div>
-      </div>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 2,241 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
+        </div>
+      </footer>
+    </section>
 
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:65%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:70%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:74%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:50%"></div></div></div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 2,241 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
-        </div>
-      </div>
-    </article>
-
-    <!-- ━━━━ COMPANY 4 ━━━━ -->
-    <article class="company-card" data-company-id="4" data-industry="E-Commerce" data-rating="4.5">
-      <div class="card-header">
-        <div class="company-logo" style="background:#4a1d5c;">SH</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="ShopHive Inc.">ShopHive Inc.</a></div>
-          <div class="company-info">
-            <span data-field="industry">E-Commerce · Retail Tech</span>
-            <span data-field="founded">Founded 2016</span>
-            <span data-field="size">9,700 Employees</span>
-            <span data-field="location">Seattle, WA</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">E-Commerce</span>
-            <span class="tag tag-verified">✔ Verified</span>
-            <span class="tag tag-featured">Featured</span>
+    <!-- ══════════════════════════════════ LISTING 4 — ShopHive Inc. ══ -->
+    <section class="listing-block" tv-ref="4" tv-sector="E-Commerce" tv-score="4.5">
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#4a1d5c; margin:0;">SH</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="ShopHive Inc.">ShopHive Inc.</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="E-Commerce · Retail Tech">E-Commerce · Retail Tech</li>
+            <li tv-yr="2016">Founded 2016</li>
+            <li tv-size="9700">9,700 Employees</li>
+            <li tv-hq="Seattle, WA">Seattle, WA</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">E-Commerce</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
+            <span class="label-pill pill-top">Featured</span>
           </div>
         </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">4.5<span class="out-of">/5</span></div>
-          <div class="stars">★★★★★</div>
-          <div class="review-count" data-field="review-count">3,108 reviews</div>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="review-item" data-review-id="r401">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#4a1d5c;">MO</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Marcus Okafor</div>
-                <div class="reviewer-role" data-field="reviewer-role">Data Scientist · Current Employee</div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="4.5">4.5<span class="denom">/5</span></b>
+          <p class="star-row">★★★★★</p>
+          <p class="vol-note" tv-vol="3108">3,108 reviews</p>
+        </aside>
+      </header>
+      <section class="entry-body">
+        <ol>
+          <li class="feedback-row" tv-rid="r401">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#4a1d5c;">MO</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Marcus Okafor">Marcus Okafor</strong>
+                  <small class="writer-post" tv-role="Data Scientist · Current Employee">Data Scientist · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="5">★★★★★</span>
+                <time class="feedback-ts" tv-posted="2025-03-14" datetime="2025-03-14">March 14, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★★</div>
-              <div class="review-date" data-field="review-date">March 14, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">The data team here is legitimately world-class</div>
-          <div class="review-body" data-field="review-text">ShopHive's investment in data infrastructure is remarkable. We run experiments at a scale most companies dream about. The culture of intellectual curiosity is genuine — I've never felt more challenged or supported simultaneously. The leadership actually reads research papers, which sounds small but changes everything about how decisions get made. Stock comp vests fast too.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Massive data scale, smart colleagues, excellent equity</div>
-            <div class="cons"><strong>✗ Cons:</strong> Pace is relentless, cross-team alignment can be chaotic</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r402">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#b84c2b;">YP</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Yuki Patel</div>
-                <div class="reviewer-role" data-field="reviewer-role">UX Designer · Former Employee</div>
+            <h4 class="feedback-heading" tv-subject="The data team here is legitimately world-class">The data team here is legitimately world-class</h4>
+            <blockquote class="feedback-content" tv-body>ShopHive's investment in data infrastructure is remarkable. We run experiments at a scale most companies dream about. The culture of intellectual curiosity is genuine — I've never felt more challenged or supported simultaneously. The leadership actually reads research papers, which sounds small but changes everything about how decisions get made. Stock comp vests fast too.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Massive data scale, smart colleagues, excellent equity</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Pace is relentless, cross-team alignment can be chaotic</dd></div>
+            </dl>
+          </li>
+          <li class="feedback-row" tv-rid="r402">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#b84c2b;">YP</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Yuki Patel">Yuki Patel</strong>
+                  <small class="writer-post" tv-role="UX Designer · Former Employee">UX Designer · Former Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="4">★★★★☆</span>
+                <time class="feedback-ts" tv-posted="2024-11-22" datetime="2024-11-22">November 22, 2024</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★☆</div>
-              <div class="review-date" data-field="review-date">November 22, 2024</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Design is respected but always secondary to data</div>
-          <div class="review-body" data-field="review-text">ShopHive is a metrics-first company, which has pros and cons for designers. Your work gets measured and validated constantly, which is intellectually honest but can feel reductive when nuance matters. The tools budget is generous, the design team is talented, and you'll ship things that millions of people use. Just be prepared to defend every pixel with a conversion stat.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Scale of impact, great tools budget, smart team</div>
-            <div class="cons"><strong>✗ Cons:</strong> Design often overruled by A/B tests, fast churn</div>
-          </div>
+            <h4 class="feedback-heading" tv-subject="Design is respected but always secondary to data">Design is respected but always secondary to data</h4>
+            <blockquote class="feedback-content" tv-body>ShopHive is a metrics-first company, which has pros and cons for designers. Your work gets measured and validated constantly, which is intellectually honest but can feel reductive when nuance matters. The tools budget is generous, the design team is talented, and you'll ship things that millions of people use. Just be prepared to defend every pixel with a conversion stat.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Scale of impact, great tools budget, smart team</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Design often overruled by A/B tests, fast churn</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:86%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:90%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:88%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:68%"></div></div></span>
         </div>
-      </div>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 3,108 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
+        </div>
+      </footer>
+    </section>
 
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:86%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:90%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:88%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:68%"></div></div></div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 3,108 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
-        </div>
-      </div>
-    </article>
-
-    <!-- ━━━━ COMPANY 5 ━━━━ -->
-    <article class="company-card" data-company-id="5" data-industry="Consulting" data-rating="3.5">
-      <div class="card-header">
-        <div class="company-logo" style="background:#3d3228;">BV</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="BridgeView Consulting">BridgeView Consulting</a></div>
-          <div class="company-info">
-            <span data-field="industry">Consulting · Strategy</span>
-            <span data-field="founded">Founded 2004</span>
-            <span data-field="size">2,800 Employees</span>
-            <span data-field="location">Boston, MA</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">Consulting</span>
-            <span class="tag tag-verified">✔ Verified</span>
+    <!-- ══════════════════════════════════ LISTING 5 — BridgeView Consulting ══ -->
+    <section class="listing-block" tv-ref="5" tv-sector="Consulting" tv-score="3.5">
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#3d3228; margin:0;">BV</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="BridgeView Consulting">BridgeView Consulting</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="Consulting · Strategy">Consulting · Strategy</li>
+            <li tv-yr="2004">Founded 2004</li>
+            <li tv-size="2800">2,800 Employees</li>
+            <li tv-hq="Boston, MA">Boston, MA</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">Consulting</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
           </div>
         </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">3.5<span class="out-of">/5</span></div>
-          <div class="stars">★★★☆☆</div>
-          <div class="review-count" data-field="review-count">744 reviews</div>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="review-item" data-review-id="r501">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#3d3228;">CW</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Clara Whitfield</div>
-                <div class="reviewer-role" data-field="reviewer-role">Business Analyst · Former Employee</div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="3.5">3.5<span class="denom">/5</span></b>
+          <p class="star-row">★★★☆☆</p>
+          <p class="vol-note" tv-vol="744">744 reviews</p>
+        </aside>
+      </header>
+      <section class="entry-body">
+        <ol>
+          <li class="feedback-row" tv-rid="r501">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#3d3228;">CW</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Clara Whitfield">Clara Whitfield</strong>
+                  <small class="writer-post" tv-role="Business Analyst · Former Employee">Business Analyst · Former Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="3">★★★☆☆</span>
+                <time class="feedback-ts" tv-posted="2025-01-28" datetime="2025-01-28">January 28, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★☆☆</div>
-              <div class="review-date" data-field="review-date">January 28, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Good launchpad, questionable long-term home</div>
-          <div class="review-body" data-field="review-text">BridgeView gave me a solid foundation in strategy consulting. The client exposure is real from day one, and the case methodology training is rigorous. However, the up-or-out culture is intense, and the emphasis on billable hours creates a mercenary atmosphere that erodes team cohesion over time. I left after 3 years for a corporate strategy role and haven't looked back.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Strong training, diverse client exposure, brand prestige</div>
-            <div class="cons"><strong>✗ Cons:</strong> Up-or-out pressure, travel burnout, billable-hours obsession</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r502">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#c9953a;">RB</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Raj Bhattacharya</div>
-                <div class="reviewer-role" data-field="reviewer-role">Senior Manager · Current Employee</div>
+            <h4 class="feedback-heading" tv-subject="Good launchpad, questionable long-term home">Good launchpad, questionable long-term home</h4>
+            <blockquote class="feedback-content" tv-body>BridgeView gave me a solid foundation in strategy consulting. The client exposure is real from day one, and the case methodology training is rigorous. However, the up-or-out culture is intense, and the emphasis on billable hours creates a mercenary atmosphere that erodes team cohesion over time. I left after 3 years for a corporate strategy role and haven't looked back.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Strong training, diverse client exposure, brand prestige</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Up-or-out pressure, travel burnout, billable-hours obsession</dd></div>
+            </dl>
+          </li>
+          <li class="feedback-row" tv-rid="r502">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#c9953a;">RB</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Raj Bhattacharya">Raj Bhattacharya</strong>
+                  <small class="writer-post" tv-role="Senior Manager · Current Employee">Senior Manager · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="4">★★★★☆</span>
+                <time class="feedback-ts" tv-posted="2025-02-11" datetime="2025-02-11">February 11, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★☆</div>
-              <div class="review-date" data-field="review-date">February 11, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Once you make manager, it genuinely gets better</div>
-          <div class="review-body" data-field="review-text">The early years at BridgeView are a grind — no sugarcoating that. But the senior manager level unlocks genuine autonomy, meaningful client relationships, and a compensation package that starts making real sense. I've seen many peers leave too early. The firm rewards loyalty in ways that aren't obvious from the outside. Still, it's not for people who value predictable hours.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Senior autonomy, loyalty rewards, excellent client relationships</div>
-            <div class="cons"><strong>✗ Cons:</strong> Steep early years, work-life deteriorates during crunch</div>
-          </div>
+            <h4 class="feedback-heading" tv-subject="Once you make manager, it genuinely gets better">Once you make manager, it genuinely gets better</h4>
+            <blockquote class="feedback-content" tv-body>The early years at BridgeView are a grind — no sugarcoating that. But the senior manager level unlocks genuine autonomy, meaningful client relationships, and a compensation package that starts making real sense. I've seen many peers leave too early. The firm rewards loyalty in ways that aren't obvious from the outside. Still, it's not for people who value predictable hours.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Senior autonomy, loyalty rewards, excellent client relationships</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Steep early years, work-life deteriorates during crunch</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:60%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:78%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:82%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:38%"></div></div></span>
         </div>
-      </div>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 744 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
+        </div>
+      </footer>
+    </section>
 
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:60%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:78%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:82%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:38%"></div></div></div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 744 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
-        </div>
-      </div>
-    </article>
-
-    <!-- ━━━━ COMPANY 6 ━━━━ -->
-    <article class="company-card" data-company-id="6" data-industry="Logistics" data-rating="4.0">
-      <div class="card-header">
-        <div class="company-logo" style="background:#1e4a6e;">SF</div>
-        <div class="company-meta">
-          <div class="company-name"><a href="#" data-company="SwiftFlow Logistics">SwiftFlow Logistics</a></div>
-          <div class="company-info">
-            <span data-field="industry">Logistics · Supply Chain</span>
-            <span data-field="founded">Founded 2009</span>
-            <span data-field="size">14,200 Employees</span>
-            <span data-field="location">Dallas, TX</span>
-          </div>
-          <div class="tags">
-            <span class="tag tag-industry">Logistics</span>
-            <span class="tag tag-verified">✔ Verified</span>
+    <!-- ══════════════════════════════════ LISTING 6 — SwiftFlow Logistics ══ -->
+    <section class="listing-block" tv-ref="6" tv-sector="Logistics" tv-score="4.0">
+      <header class="entry-top">
+        <figure class="org-emblem" style="background:#1e4a6e; margin:0;">SF</figure>
+        <div class="org-details">
+          <h3 class="org-title"><a href="#" tv-name="SwiftFlow Logistics">SwiftFlow Logistics</a></h3>
+          <ul class="org-meta">
+            <li tv-sector="Logistics · Supply Chain">Logistics · Supply Chain</li>
+            <li tv-yr="2009">Founded 2009</li>
+            <li tv-size="14200">14,200 Employees</li>
+            <li tv-hq="Dallas, TX">Dallas, TX</li>
+          </ul>
+          <div class="label-group">
+            <span class="label-pill pill-sector">Logistics</span>
+            <span class="label-pill pill-auth">✔ Verified</span>
           </div>
         </div>
-        <div class="rating-block">
-          <div class="rating-score" data-field="overall-rating">4.0<span class="out-of">/5</span></div>
-          <div class="stars">★★★★☆</div>
-          <div class="review-count" data-field="review-count">1,587 reviews</div>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="review-item" data-review-id="r601">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#1e4a6e;">DM</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Derek Maynard</div>
-                <div class="reviewer-role" data-field="reviewer-role">Operations Supervisor · Current Employee</div>
+        <aside class="score-panel">
+          <b class="score-main" tv-score="4.0">4.0<span class="denom">/5</span></b>
+          <p class="star-row">★★★★☆</p>
+          <p class="vol-note" tv-vol="1587">1,587 reviews</p>
+        </aside>
+      </header>
+      <section class="entry-body">
+        <ol>
+          <li class="feedback-row" tv-rid="r601">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#1e4a6e;">DM</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Derek Maynard">Derek Maynard</strong>
+                  <small class="writer-post" tv-role="Operations Supervisor · Current Employee">Operations Supervisor · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="4">★★★★☆</span>
+                <time class="feedback-ts" tv-posted="2025-03-05" datetime="2025-03-05">March 5, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★☆</div>
-              <div class="review-date" data-field="review-date">March 5, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Operationally excellent, management varies by location</div>
-          <div class="review-body" data-field="review-text">SwiftFlow has some of the most sophisticated routing and warehouse technology I've seen in 15 years of logistics. The company genuinely invests in its frontline supervisors, which is unusual in this industry. The experience heavily depends on your regional director — mine has been exceptional. Holiday peaks are intense but the overtime pay is fair and the scheduling is communicated well in advance.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Strong technology, good supervisor training, fair overtime</div>
-            <div class="cons"><strong>✗ Cons:</strong> Experience varies by region, holiday peaks are intense</div>
-          </div>
-        </div>
-
-        <div class="review-item" data-review-id="r602">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <div class="reviewer-avatar" style="background:#3d5a4c;">FN</div>
-              <div>
-                <div class="reviewer-name" data-field="reviewer-name">Fatima Nasir</div>
-                <div class="reviewer-role" data-field="reviewer-role">Supply Chain Analyst · Current Employee</div>
+            <h4 class="feedback-heading" tv-subject="Operationally excellent, management varies by location">Operationally excellent, management varies by location</h4>
+            <blockquote class="feedback-content" tv-body>SwiftFlow has some of the most sophisticated routing and warehouse technology I've seen in 15 years of logistics. The company genuinely invests in its frontline supervisors, which is unusual in this industry. The experience heavily depends on your regional director — mine has been exceptional. Holiday peaks are intense but the overtime pay is fair and the scheduling is communicated well in advance.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Strong technology, good supervisor training, fair overtime</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Experience varies by region, holiday peaks are intense</dd></div>
+            </dl>
+          </li>
+          <li class="feedback-row" tv-rid="r602">
+            <div class="feedback-top">
+              <div class="writer-group">
+                <span class="writer-icon" style="background:#3d5a4c;">FN</span>
+                <address style="font-style:normal;">
+                  <strong class="writer-label" tv-author="Fatima Nasir">Fatima Nasir</strong>
+                  <small class="writer-post" tv-role="Supply Chain Analyst · Current Employee">Supply Chain Analyst · Current Employee</small>
+                </address>
+              </div>
+              <div class="feedback-aside">
+                <span class="feedback-stars" tv-rating="5">★★★★★</span>
+                <time class="feedback-ts" tv-posted="2025-01-30" datetime="2025-01-30">January 30, 2025</time>
               </div>
             </div>
-            <div class="review-meta">
-              <div class="review-stars" data-field="review-rating">★★★★★</div>
-              <div class="review-date" data-field="review-date">January 30, 2025</div>
-            </div>
-          </div>
-          <div class="review-title" data-field="review-title">Incredible exposure to global supply chain problems</div>
-          <div class="review-body" data-field="review-text">As a supply chain analyst, the complexity and scope of problems at SwiftFlow is unmatched outside of a top-5 global company. I've worked on projects spanning four continents. The data engineering team is strong, the leadership is data-driven, and the DEI programs are substantive rather than performative. Salary could be more competitive for analysts, but total comp with bonus brings it in line.</div>
-          <div class="review-pros-cons">
-            <div class="pros"><strong>✔ Pros:</strong> Global scope, excellent DEI, strong leadership</div>
-            <div class="cons"><strong>✗ Cons:</strong> Base salary slightly below market, slow internal promotions</div>
-          </div>
+            <h4 class="feedback-heading" tv-subject="Incredible exposure to global supply chain problems">Incredible exposure to global supply chain problems</h4>
+            <blockquote class="feedback-content" tv-body>As a supply chain analyst, the complexity and scope of problems at SwiftFlow is unmatched outside of a top-5 global company. I've worked on projects spanning four continents. The data engineering team is strong, the leadership is data-driven, and the DEI programs are substantive rather than performative. Salary could be more competitive for analysts, but total comp with bonus brings it in line.</blockquote>
+            <dl class="verdict-split">
+              <div class="v-good"><dt>✔ Pros:</dt> <dd>Global scope, excellent DEI, strong leadership</dd></div>
+              <div class="v-bad"><dt>✗ Cons:</dt> <dd>Base salary slightly below market, slow internal promotions</dd></div>
+            </dl>
+          </li>
+        </ol>
+      </section>
+      <footer class="entry-base">
+        <div class="attr-strip">
+          <span class="attr-cell">Culture <div class="attr-track"><div class="attr-fill" style="width:78%"></div></div></span>
+          <span class="attr-cell">Pay <div class="attr-track"><div class="attr-fill" style="width:72%"></div></div></span>
+          <span class="attr-cell">Growth <div class="attr-track"><div class="attr-fill" style="width:76%"></div></div></span>
+          <span class="attr-cell">Work-Life <div class="attr-track"><div class="attr-fill" style="width:70%"></div></div></span>
         </div>
-      </div>
-
-      <div class="card-footer">
-        <div class="breakdown">
-          <div class="breakdown-item">Culture <div class="breakdown-bar"><div class="breakdown-fill" style="width:78%"></div></div></div>
-          <div class="breakdown-item">Pay <div class="breakdown-bar"><div class="breakdown-fill" style="width:72%"></div></div></div>
-          <div class="breakdown-item">Growth <div class="breakdown-bar"><div class="breakdown-fill" style="width:76%"></div></div></div>
-          <div class="breakdown-item">Work-Life <div class="breakdown-bar"><div class="breakdown-fill" style="width:70%"></div></div></div>
+        <div class="cta-cluster">
+          <button class="ghost-btn">All 1,587 Reviews</button>
+          <button class="solid-btn">Company Profile</button>
         </div>
-        <div class="card-actions">
-          <button class="btn-outline">All 1,587 Reviews</button>
-          <button class="btn-primary">Company Profile</button>
-        </div>
-      </div>
-    </article>
+      </footer>
+    </section>
 
     <!-- PAGINATION -->
-    <div class="pagination">
-      <button class="page-btn active">1</button>
-      <button class="page-btn">2</button>
-      <button class="page-btn">3</button>
-      <button class="page-btn">4</button>
-      <button class="page-btn">5</button>
-      <button class="page-btn">→</button>
-    </div>
+    <nav class="pager" aria-label="Page navigation">
+      <button class="pager-step on">1</button>
+      <button class="pager-step">2</button>
+      <button class="pager-step">3</button>
+      <button class="pager-step">4</button>
+      <button class="pager-step">5</button>
+      <button class="pager-step">→</button>
+    </nav>
   </main>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <!-- SIDEBAR: rail-module = <section>; top-rated = <ol><li> -->
+  <aside class="right-rail">
 
-    <div class="sidebar-widget">
-      <div class="widget-title">Filter by Industry</div>
-      <div class="widget-body">
-        <ul class="filter-list" id="industry-list">
-          <li data-industry="Technology"><span>Technology</span><span class="filter-count">3,240</span></li>
-          <li data-industry="Finance"><span>Finance</span><span class="filter-count">1,820</span></li>
-          <li data-industry="Healthcare"><span>Healthcare</span><span class="filter-count">2,110</span></li>
-          <li data-industry="E-Commerce"><span>E-Commerce</span><span class="filter-count">980</span></li>
-          <li data-industry="Consulting"><span>Consulting</span><span class="filter-count">760</span></li>
-          <li data-industry="Manufacturing"><span>Manufacturing</span><span class="filter-count">1,440</span></li>
-          <li data-industry="Logistics"><span>Logistics</span><span class="filter-count">890</span></li>
-          <li data-industry="SaaS"><span>SaaS</span><span class="filter-count">1,240</span></li>
+    <section class="rail-module">
+      <h3 class="module-heading">Filter by Industry</h3>
+      <div class="module-inner">
+        <ul class="opt-list" id="sector-nav">
+          <li tv-filter="Technology"><span>Technology</span><span class="opt-tally">3,240</span></li>
+          <li tv-filter="Finance"><span>Finance</span><span class="opt-tally">1,820</span></li>
+          <li tv-filter="Healthcare"><span>Healthcare</span><span class="opt-tally">2,110</span></li>
+          <li tv-filter="E-Commerce"><span>E-Commerce</span><span class="opt-tally">980</span></li>
+          <li tv-filter="Consulting"><span>Consulting</span><span class="opt-tally">760</span></li>
+          <li tv-filter="Manufacturing"><span>Manufacturing</span><span class="opt-tally">1,440</span></li>
+          <li tv-filter="Logistics"><span>Logistics</span><span class="opt-tally">890</span></li>
+          <li tv-filter="SaaS"><span>SaaS</span><span class="opt-tally">1,240</span></li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <div class="sidebar-widget">
-      <div class="widget-title">⭐ Top Rated Companies</div>
-      <div class="widget-body" id="top-rated">
-        <div class="top-company">
-          <div class="top-rank">#1</div>
-          <div class="top-info">
-            <div class="top-name" data-company="NexaCore Technologies">NexaCore Technologies</div>
-            <div class="top-cat">Technology · SaaS</div>
-          </div>
-          <div class="top-score">4.7</div>
-        </div>
-        <div class="top-company">
-          <div class="top-rank">#2</div>
-          <div class="top-info">
-            <div class="top-name" data-company="ShopHive Inc.">ShopHive Inc.</div>
-            <div class="top-cat">E-Commerce</div>
-          </div>
-          <div class="top-score">4.5</div>
-        </div>
-        <div class="top-company">
-          <div class="top-rank">#3</div>
-          <div class="top-info">
-            <div class="top-name" data-company="Apex Capital Group">Apex Capital Group</div>
-            <div class="top-cat">Finance</div>
-          </div>
-          <div class="top-score">4.2</div>
-        </div>
-        <div class="top-company">
-          <div class="top-rank">#4</div>
-          <div class="top-info">
-            <div class="top-name" data-company="SwiftFlow Logistics">SwiftFlow Logistics</div>
-            <div class="top-cat">Logistics</div>
-          </div>
-          <div class="top-score">4.0</div>
-        </div>
-        <div class="top-company">
-          <div class="top-rank">#5</div>
-          <div class="top-info">
-            <div class="top-name" data-company="MediHorizon Group">MediHorizon Group</div>
-            <div class="top-cat">Healthcare</div>
-          </div>
-          <div class="top-score">3.8</div>
-        </div>
-        <div class="top-company">
-          <div class="top-rank">#6</div>
-          <div class="top-info">
-            <div class="top-name" data-company="BridgeView Consulting">BridgeView Consulting</div>
-            <div class="top-cat">Consulting</div>
-          </div>
-          <div class="top-score">3.5</div>
-        </div>
+    <section class="rail-module">
+      <h3 class="module-heading">⭐ Top Rated Companies</h3>
+      <div class="module-inner">
+        <!-- Was bare divs, now <ol><li> -->
+        <ol class="top-listings-ol">
+          <li class="rank-row"><b class="rank-num">#1</b><div class="rank-body"><p class="rank-name">NexaCore Technologies</p><p class="rank-sector">Technology · SaaS</p></div><b class="rank-val">4.7</b></li>
+          <li class="rank-row"><b class="rank-num">#2</b><div class="rank-body"><p class="rank-name">ShopHive Inc.</p><p class="rank-sector">E-Commerce</p></div><b class="rank-val">4.5</b></li>
+          <li class="rank-row"><b class="rank-num">#3</b><div class="rank-body"><p class="rank-name">Apex Capital Group</p><p class="rank-sector">Finance</p></div><b class="rank-val">4.2</b></li>
+          <li class="rank-row"><b class="rank-num">#4</b><div class="rank-body"><p class="rank-name">SwiftFlow Logistics</p><p class="rank-sector">Logistics</p></div><b class="rank-val">4.0</b></li>
+          <li class="rank-row"><b class="rank-num">#5</b><div class="rank-body"><p class="rank-name">MediHorizon Group</p><p class="rank-sector">Healthcare</p></div><b class="rank-val">3.8</b></li>
+          <li class="rank-row"><b class="rank-num">#6</b><div class="rank-body"><p class="rank-name">BridgeView Consulting</p><p class="rank-sector">Consulting</p></div><b class="rank-val">3.5</b></li>
+        </ol>
       </div>
-    </div>
+    </section>
 
-    <div class="sidebar-widget">
-      <div class="widget-title">Rating Distribution</div>
-      <div class="widget-body">
-        <div class="rating-summary-row">
-          <div class="rs-label">5★</div>
-          <div class="rs-bar"><div class="rs-fill" style="width:48%"></div></div>
-          <div class="rs-count">48%</div>
-        </div>
-        <div class="rating-summary-row">
-          <div class="rs-label">4★</div>
-          <div class="rs-bar"><div class="rs-fill" style="width:28%"></div></div>
-          <div class="rs-count">28%</div>
-        </div>
-        <div class="rating-summary-row">
-          <div class="rs-label">3★</div>
-          <div class="rs-bar"><div class="rs-fill" style="width:13%"></div></div>
-          <div class="rs-count">13%</div>
-        </div>
-        <div class="rating-summary-row">
-          <div class="rs-label">2★</div>
-          <div class="rs-bar"><div class="rs-fill" style="width:7%"></div></div>
-          <div class="rs-count">7%</div>
-        </div>
-        <div class="rating-summary-row">
-          <div class="rs-label">1★</div>
-          <div class="rs-bar"><div class="rs-fill" style="width:4%"></div></div>
-          <div class="rs-count">4%</div>
-        </div>
+    <section class="rail-module">
+      <h3 class="module-heading">Rating Distribution</h3>
+      <div class="module-inner">
+        <div class="dist-row"><span class="dist-tag">5★</span><div class="dist-track"><div class="dist-fill" style="width:48%"></div></div><span class="dist-pct">48%</span></div>
+        <div class="dist-row"><span class="dist-tag">4★</span><div class="dist-track"><div class="dist-fill" style="width:28%"></div></div><span class="dist-pct">28%</span></div>
+        <div class="dist-row"><span class="dist-tag">3★</span><div class="dist-track"><div class="dist-fill" style="width:13%"></div></div><span class="dist-pct">13%</span></div>
+        <div class="dist-row"><span class="dist-tag">2★</span><div class="dist-track"><div class="dist-fill" style="width:7%"></div></div><span class="dist-pct">7%</span></div>
+        <div class="dist-row"><span class="dist-tag">1★</span><div class="dist-track"><div class="dist-fill" style="width:4%"></div></div><span class="dist-pct">4%</span></div>
       </div>
-    </div>
+    </section>
 
-    <div class="sidebar-widget">
-      <div class="widget-title">Recently Added</div>
-      <div class="widget-body">
-        <ul class="filter-list">
-          <li><span>Orbital Robotics</span><span class="filter-count">New</span></li>
-          <li><span>GreenLeaf Energy</span><span class="filter-count">New</span></li>
-          <li><span>Vantage Analytics</span><span class="filter-count">New</span></li>
-          <li><span>PulsePay Financial</span><span class="filter-count">New</span></li>
-          <li><span>Clarity Legal Group</span><span class="filter-count">New</span></li>
+    <section class="rail-module">
+      <h3 class="module-heading">Recently Added</h3>
+      <div class="module-inner">
+        <ul class="opt-list">
+          <li><span>Orbital Robotics</span><span class="opt-tally">New</span></li>
+          <li><span>GreenLeaf Energy</span><span class="opt-tally">New</span></li>
+          <li><span>Vantage Analytics</span><span class="opt-tally">New</span></li>
+          <li><span>PulsePay Financial</span><span class="opt-tally">New</span></li>
+          <li><span>Clarity Legal Group</span><span class="opt-tally">New</span></li>
         </ul>
       </div>
-    </div>
+    </section>
 
   </aside>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Trust<span>Vault</span></div>
+<!-- FOOTER: nav links now <ul><li><a> -->
+<footer class="site-footer">
+  <p class="footer-brand">Trust<em>Vault</em></p>
   <p>The independent platform for verified company reviews.</p>
-  <div class="footer-links">
-    <a href="#">About Us</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Service</a>
-    <a href="#">Advertise</a>
-    <a href="#">API Access</a>
-    <a href="#">Contact</a>
-  </div>
-  <p style="margin-top:12px;">© 2025 TrustVault, Inc. All rights reserved. Reviews represent individual opinions only.</p>
+  <ul class="footer-nav">
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Terms of Service</a></li>
+    <li><a href="#">Advertise</a></li>
+    <li><a href="#">API Access</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p style="margin-top:12px;">© 2025 TrustVault, Inc. All rights reserved.</p>
 </footer>
 
 <script>
-  // Simple filter functionality
-  function applyFilters() {
-    const query = document.getElementById('search-input').value.toLowerCase();
-    const industry = document.getElementById('industry-filter').value;
-    const ratingFilter = document.getElementById('rating-filter').value;
-
-    const cards = document.querySelectorAll('.company-card');
+  function runFilter() {
+    const q = document.getElementById('q-input').value.toLowerCase();
+    const sector = document.getElementById('q-sector').value;
+    const scoreFilter = document.getElementById('q-score').value;
+    const blocks = document.querySelectorAll('.listing-block');
     let visible = 0;
-
-    cards.forEach(card => {
-      const name = card.querySelector('[data-company]')?.textContent.toLowerCase() || '';
-      const cardIndustry = card.getAttribute('data-industry');
-      const rating = parseFloat(card.getAttribute('data-rating'));
-
+    blocks.forEach(block => {
+      const name = block.querySelector('[tv-name]')?.textContent.toLowerCase() || '';
+      const blockSector = block.getAttribute('tv-sector');
+      const score = parseFloat(block.getAttribute('tv-score'));
       let show = true;
-      if (query && !name.includes(query)) show = false;
-      if (industry && cardIndustry !== industry) show = false;
-      if (ratingFilter === '5 Stars' && rating < 4.8) show = false;
-      if (ratingFilter === '4+ Stars' && rating < 4.0) show = false;
-      if (ratingFilter === '3+ Stars' && rating < 3.0) show = false;
-      if (ratingFilter === 'Under 3' && rating >= 3.0) show = false;
-
-      card.style.display = show ? 'block' : 'none';
+      if (q && !name.includes(q)) show = false;
+      if (sector && blockSector !== sector) show = false;
+      if (scoreFilter === '5 Stars' && score < 4.8) show = false;
+      if (scoreFilter === '4+ Stars' && score < 4.0) show = false;
+      if (scoreFilter === '3+ Stars' && score < 3.0) show = false;
+      if (scoreFilter === 'Under 3' && score >= 3.0) show = false;
+      block.style.display = show ? 'block' : 'none';
       if (show) visible++;
     });
-
-    document.getElementById('result-count').textContent =
-      `Showing ${visible} of 12,480 companies`;
+    document.getElementById('tally-label').textContent = `Showing ${visible} of 12,480 companies`;
   }
-
-  // Industry sidebar filter
-  document.querySelectorAll('#industry-list li').forEach(li => {
+  document.querySelectorAll('#sector-nav li').forEach(li => {
     li.addEventListener('click', () => {
-      const industry = li.getAttribute('data-industry');
-      document.getElementById('industry-filter').value = industry;
-      applyFilters();
+      document.getElementById('q-sector').value = li.getAttribute('tv-filter');
+      runFilter();
     });
   });
-
-  // Enter key triggers search
-  document.getElementById('search-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') applyFilters();
-  });
-
-  // Card entrance animation
-  const cards = document.querySelectorAll('.company-card');
-  cards.forEach((card, i) => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
+  document.getElementById('q-input').addEventListener('keydown', e => { if (e.key === 'Enter') runFilter(); });
+  document.querySelectorAll('.listing-block').forEach((b, i) => {
+    b.style.opacity = '0';
+    b.style.transform = 'translateY(20px)';
     setTimeout(() => {
-      card.style.transition = 'opacity .4s ease, transform .4s ease';
-      card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
+      b.style.transition = 'opacity .4s ease, transform .4s ease';
+      b.style.opacity = '1';
+      b.style.transform = 'translateY(0)';
     }, 80 * i);
   });
 </script>
